@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24山座向計算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #compass {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            position: relative;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Compass_Rose_English_North.svg/1200px-Compass_Rose_English_North.svg.png') no-repeat center/contain;
+            border-radius: 50%;
+        }
+        #needle {
+            position: absolute;
+            width: 5px;
+            height: 150px;
+            background: linear-gradient(to bottom, red, rgba(255, 0, 0, 0));
+            top: 75px;
+            left: 147.5px;
+            transform-origin: bottom center;
+            transform: rotate(0deg);
+            transition: transform 0.5s ease-out;
+        }
+        input {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>24山座向計算器</h1>
+    <p>輸入方位角度（0° - 360°）：</p>
+    <input type="number" id="angleInput" min="0" max="360" placeholder="輸入角度">
+    <button onclick="calculateDirection()">計算座向</button>
+    <p id="result">結果將顯示在這裡</p>
+
+    <div id="compass">
+        <div id="needle"></div>
+    </div>
+
+    <script>
+        function calculateDirection() {
+            const angle = parseFloat(document.getElementById("angleInput").value);
+            if (angle < 0 || angle > 360 || isNaN(angle)) {
+                document.getElementById("result").innerText = "請輸入有效的角度（0° - 360°）";
+                return;
+            }
+
+            const directions = [
+                { name: "子山", start: 352.5, end: 7.5, opposite: "午向" },
+                { name: "癸山", start: 7.5, end: 22.5, opposite: "丁向" },
+                { name: "丑山", start: 22.5, end: 37.5, opposite: "未向" },
+                { name: "艮山", start: 37.5, end: 52.5, opposite: "坤向" },
+                { name: "寅山", start: 52.5, end: 67.5, opposite: "申向" },
+                { name: "甲山", start: 67.5, end: 82.5, opposite: "庚向" },
+                { name: "卯山", start: 82.5, end: 97.5, opposite: "酉向" },
+                { name: "乙山", start: 97.5, end: 112.5, opposite: "辛向" },
+                { name: "辰山", start: 112.5, end: 127.5, opposite: "戌向" },
+                { name: "巽山", start: 127.5, end: 142.5, opposite: "乾向" },
+                { name: "巳山", start: 142.5, end: 157.5, opposite: "亥向" },
+                { name: "丙山", start: 157.5, end: 172.5, opposite: "壬向" },
+                { name: "午山", start: 172.5, end: 187.5, opposite: "子向" },
+                { name: "丁山", start: 187.5, end: 202.5, opposite: "癸向" },
+                { name: "未山", start: 202.5, end: 217.5, opposite: "丑向" },
+                { name: "坤山", start: 217.5, end: 232.5, opposite: "艮向" },
+                { name: "申山", start: 232.5, end: 247.5, opposite: "寅向" },
+                { name: "庚山", start: 247.5, end: 262.5, opposite: "甲向" },
+                { name: "酉山", start: 262.5, end: 277.5, opposite: "卯向" },
+                { name: "辛山", start: 277.5, end: 292.5, opposite: "乙向" },
+                { name: "戌山", start: 292.5, end: 307.5, opposite: "辰向" },
+                { name: "乾山", start: 307.5, end: 322.5, opposite: "巽向" },
+                { name: "亥山", start: 322.5, end: 337.5, opposite: "巳向" },
+                { name: "壬山", start: 337.5, end: 352.5, opposite: "丙向" }
+            ];
+
+            let directionName = "未知方向";
+            for (const dir of directions) {
+                if (
+                    (angle >= dir.start && angle <= dir.end) ||
+                    (dir.start > dir.end && (angle >= dir.start || angle <= dir.end))
+                ) {
+                    directionName = `${dir.name}${dir.opposite}`;
+                    break;
+                }
+            }
+
+            document.getElementById("result").innerText = `方位角 ${angle}° 對應的座向是：${directionName}`;
+
+            // 更新羅盤指針
+            const needle = document.getElementById("needle");
+            needle.style.transform = `rotate(${angle}deg)`;
+        }
+    </script>
+</body>
+</html>
